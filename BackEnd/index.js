@@ -28,6 +28,6 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
     return res.json({
         success: true,
-        message:"Port 4000 Running"
+        message:"Port 4000 Running",
     })
 })
