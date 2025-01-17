@@ -25,5 +25,15 @@ app.get("/", (req, res) => {
 })
 
 app.listen(PORT, () => {
+<<<<<<< HEAD
     console.log(`App is listening at port ${PORT}`)
+=======
+    return res.json({
+        success: true,
+        message:"Port 4000 Running",
+    })
+
+
+    
+>>>>>>> 5073ab1a7a4bff07e40d779b44907707014edba4
 })
