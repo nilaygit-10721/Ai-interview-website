@@ -1,21 +1,20 @@
 const express = require("express")
 const dotenv = require("dotenv")
-dotenv.config()
-dotenv.connect()
+app = express()
+dotenv.config();
+const PORT = process.env.PORT || 4000;
+const database = require("./config/database.js")
+
+database.connect()
 
 app.use(express.json())
-app.use(
-	cors({
-		origin: "*",
-		credentials: true,
-	})
-);
-app.use(
-	fileUpload({
-		useTempFiles: true,
-		tempFileDir: "/tmp/",
-	})
-);
+
+// app.use(
+// 	fileUpload({
+// 		useTempFiles: true,
+// 		tempFileDir: "/tmp/",
+// 	})
+// );
 
 
 app.get("/", (req, res) => {
@@ -26,8 +25,5 @@ app.get("/", (req, res) => {
 })
 
 app.listen(PORT, () => {
-    return res.json({
-        success: true,
-        message:"Port 4000 Running",
-    })
+    console.log(`App is listening at port ${PORT}`)
 })
