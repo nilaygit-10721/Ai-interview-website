@@ -5,7 +5,7 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 const database = require("./config/database.js")
 
-database.connect()
+
 
 app.use(express.json())
 
@@ -16,6 +16,8 @@ app.use(express.json())
 // 	})
 // );
 
+const user = require("./routes/routes.js")
+app.use("/api/v1", user);
 
 app.get("/", (req, res) => {
     return res.json({
@@ -24,16 +26,13 @@ app.get("/", (req, res) => {
     })
 })
 
-app.listen(PORT, () => {
-<<<<<<< HEAD
-    console.log(`App is listening at port ${PORT}`)
-=======
-    return res.json({
-        success: true,
-        message:"Port 4000 Running",
-    })
-
-
-    
->>>>>>> 5073ab1a7a4bff07e40d779b44907707014edba4
+app.listen(PORT, (req,res) => {
+    console.log(`App is listening at port ${PORT}`)    
 })
+
+
+app.get("/", (req, res) => {
+    res.send('<h1>This is my homepage</h1>');
+})
+
+database.connect()
