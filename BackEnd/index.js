@@ -1,38 +1,36 @@
-const express = require("express")
-const dotenv = require("dotenv")
-app = express()
+const express = require("express");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const database = require("./config/database.js");
+
+// Initialize express
+const app = express();
+
+// Configure environment variables
 dotenv.config();
 const PORT = process.env.PORT || 4000;
-const database = require("./config/database.js")
 
+// Middleware
+app.use(express.json());
 
+// Import routes
+const user = require("./routes/routes.js");
 
-app.use(express.json())
-
-// app.use(
-// 	fileUpload({
-// 		useTempFiles: true,
-// 		tempFileDir: "/tmp/",
-// 	})
-// );
-
-const user = require("./routes/routes.js")
+// Route middleware
 app.use("/api/v1", user);
 
+// Home route
 app.get("/", (req, res) => {
     return res.json({
         success: true,
-        message:"Server Started Successfully",
-    })
-})
+        message: "Server Started Successfully",
+    });
+});
 
-app.listen(PORT, (req,res) => {
-    console.log(`App is listening at port ${PORT}`)    
-})
+// Start the server
+app.listen(PORT, () => {
+    console.log(`App is listening at port ${PORT}`);
+});
 
-
-app.get("/", (req, res) => {
-    res.send('<h1>This is my homepage</h1>');
-})
-
-database.connect()
+// Connect to database using the connect method
+database.connect();

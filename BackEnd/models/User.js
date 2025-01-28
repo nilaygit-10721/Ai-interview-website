@@ -1,42 +1,74 @@
-// Import the Mongoose library
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs"); // Ensure this is correctly imported
 
-// Define the user schema using the Mongoose Schema constructor
 const userSchema = new mongoose.Schema(
   {
-    // Define the name field with type String, required, and trimmed
     firstName: {
       type: String,
-      required: true,
+      required: [true, "First name is required"],
       trim: true,
     },
     lastName: {
       type: String,
-      required: true,
+      required: [true, "Last name is required"],
       trim: true,
     },
-    // Define the email field with type String, required, and trimmed
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       trim: true,
+      unique: true,
+      lowercase: true,
+      validate: {
+        validator: function (value) {
+          return /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(value);
+        },
+        message: "Please enter a valid email address",
+      },
     },
-
-    // Define the password field with type String and required
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required"],
+      select: false, // Exclude from query results by default
     },
     token: {
       type: String,
+      select: false, // Don't include in queries by default
+      sparse: true, // Ignore null values for uniqueness
     },
     resetPasswordExpires: {
       type: Date,
+      select: false, // Don't include in queries by default
     },
-    // Add timestamps for when the document is created and last modified
   },
-  { timestamps: true }
-)
+  {
+    timestamps: true,
+    toJSON: {
+      transform: function (doc, ret) {
+        delete ret.password; // Remove password from the JSON output
+        delete ret.__v; // Remove version key from the JSON output
+        return ret;
+      },
+    },
+  }
+);
 
-// Export the Mongoose model for the user schema, using the name "user"
-module.exports = mongoose.model("user", userSchema)
+// Hash the password before saving the user
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next(); // Skip if password is not modified
+
+  try {
+    const salt = await bcrypt.genSalt(10); // Generate a salt
+    this.password = await bcrypt.hash(this.password, salt); // Hash the password
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Add a method to compare passwords
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+module.exports = mongoose.model("Users_data", userSchema);
