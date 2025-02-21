@@ -1,74 +1,105 @@
-const CoverLetter = require("../models/CoverLetter"); // New CoverLetter model
+const CoverLetter = require("../models/CoverLetter");
 const User = require("../models/User");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const path = require("path");
+const latex = require("node-latex");
 require("dotenv").config();
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-// Function to clean and format cover letter text
-const formatCoverLetterText = (text) => {
-    return text
-        .replace(/\[.*?\]/g, "") // Remove placeholders inside square brackets []
-        .replace(/\*/g, "") // Remove asterisks (*)
-        .replace(/\n{2,}/g, "\n") // Remove excessive newlines
-        .trim();
-};
-
-// Function to create a well-formatted PDF for cover letter
-const createFormattedCoverLetterPDF = (coverLetterText, outputPath) => {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({ margin: 50 });
-        const stream = fs.createWriteStream(outputPath);
-        doc.pipe(stream);
-
-        // Clean and format text
-        const formattedText = formatCoverLetterText(coverLetterText);
-        const lines = formattedText.split("\n");
-
-        lines.forEach((line, index) => {
-            line = line.trim();
-            if (line === "") {
-                doc.moveDown(1); // Add spacing for empty lines
-            } else if (line.match(/^\*\*.*\*\*$/)) {
-                doc.font("Helvetica-Bold").fontSize(16).text(line.replace(/\*\*/g, ""), { align: "left" });
-                doc.moveDown(1);
-            } else if (index > 0 && lines[index - 1].match(/^\*\*.*\*\*$/)) {
-                doc.font("Helvetica").fontSize(14).text(line, { align: "left", lineGap: 6 });
-                doc.moveDown(0.5);
-            } else {
-                doc.font("Helvetica").fontSize(12).text(line, { align: "left", lineGap: 4 });
-            }
-        });
-
-        doc.end();
-        stream.on("finish", () => resolve(outputPath));
-        stream.on("error", (err) => reject(err));
+// Function to create a LaTeX cover letter template
+const generateLatexCoverLetter = ({ 
+    name, 
+    email, 
+    phone, 
+    streetAddress,
+    city,
+    postalCode,
+    jobTitle, 
+    company,
+    companyAddress,
+    companyCity,
+    companyPostalCode,
+    date,
+    attachments,
+    content
+}) => {
+    const today = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     });
-};
 
-// Function to call Gemini API and generate cover letter content
-const generateCoverLetterText = async (prompt) => {
-    try {
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        return response.text();
-    } catch (error) {
-        console.error("Error generating cover letter:", error);
-        throw new Error("Failed to generate cover letter content");
-    }
+    // Escape special LaTeX characters in content
+    const escapedContent = content.replace(/([&%$#_{}])/g, '\\$1');
+
+    return `\\documentclass[11pt,a4paper]{letter}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage{geometry}
+\\usepackage{hyperref}
+
+\\geometry{
+    left=1.25in,
+    right=1.25in,
+    top=1.25in,
+    bottom=1.25in
+}
+
+\\begin{document}
+
+\\begin{letter}{${company}\\\\
+${companyAddress}\\\\
+${companyCity}, ${companyPostalCode}}
+
+\\address{${name}\\\\
+${streetAddress}\\\\
+${city}, ${postalCode}\\\\
+${phone}\\\\
+${email}}
+
+\\date{${date || today}}
+
+\\opening{Dear Hiring Manager,}
+
+${escapedContent}
+
+\\vspace{\\baselineskip}
+\\noindent
+${attachments ? `\\vspace{\\baselineskip}\\noindent Attachments: ${attachments}` : ''}
+
+\\closing{Sincerely,}
+
+\\vspace{0.5in}
+${name}
+
+\\end{letter}
+\\end{document}`;
 };
 
 // Cover Letter Generator Controller
 exports.coverLetterBuilder = async (req, res) => {
     try {
-        const { userId, name, email, phone, jobTitle, company, skills, experience, achievements } = req.body;
+        const { 
+            userId, 
+            name, 
+            email, 
+            phone, 
+            streetAddress,
+            city,
+            postalCode,
+            jobTitle, 
+            company,
+            companyAddress,
+            companyCity,
+            companyPostalCode,
+            date,
+            attachments,
+            content 
+        } = req.body;
 
         // Validate request
-        if (!userId || !name || !email || !phone || !jobTitle || !company || !skills || !experience || !achievements) {
-            return res.status(400).json({ error: "All fields are required" });
+        if (!userId || !name || !email || !phone || !jobTitle || !company || !content) {
+            return res.status(400).json({ error: "Required fields are missing" });
         }
 
         // Check if user exists
@@ -77,64 +108,79 @@ exports.coverLetterBuilder = async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Construct the dynamic prompt
-        const prompt = `
-        Generate a **professional and personalized cover letter** for the following candidate applying for a job. **DO NOT** use placeholders like "[Insert Company Name]", "[Write About Your Experience]", or any other vague descriptions. **Only include real, concrete details based on the provided input.**
-
-        **Candidate Name:** ${name}  
-        **Candidate Email:** ${email}  
-        **Candidate Phone:** ${phone}  
-
-        **Job Title:** ${jobTitle}  
-        **Company:** ${company}  
-
-        **Skills:**  
-        ${skills.map(skill => `- ${skill}`).join("\n")}  
-
-        **Experience:**  
-        ${experience.map(exp => `- ${exp}`).join("\n")}  
-
-        **Achievements:**  
-        ${achievements.map(achieve => `- ${achieve}`).join("\n")}
-
-        **Make sure the cover letter follows this structure:**
-        - Personalized greeting to the hiring manager
-        - A compelling introduction highlighting interest in the job
-        - A section connecting candidate’s skills to the job requirements
-        - A section showcasing achievements and how they align with the company’s goals
-        - A professional closing paragraph with a call to action
-        `;
-
-        // Generate formatted cover letter text using Gemini API
-        const coverLetterText = await generateCoverLetterText(prompt);
-
-        // Define PDF file path
-        const outputDir = "./cover_letters"; // Ensure the "cover_letters" folder exists
-        if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
-
-        const outputPath = `${outputDir}/cover_letter_${userId}_${Date.now()}.pdf`;
-
-        // Generate and format PDF
-        await createFormattedCoverLetterPDF(coverLetterText, outputPath);
-
-        // Save the cover letter PDF path to the database
-        const newCoverLetter = new CoverLetter({
-            user: userId,
-            pdfPath: outputPath,
+        // Generate LaTeX cover letter content
+        const latexContent = generateLatexCoverLetter({ 
+            name, 
+            email, 
+            phone, 
+            streetAddress,
+            city,
+            postalCode,
+            jobTitle, 
+            company,
+            companyAddress,
+            companyCity,
+            companyPostalCode,
+            date,
+            attachments,
+            content
         });
-        await newCoverLetter.save();
+        
+        // Define LaTeX debug file path
+        const debugDir = path.join(__dirname, "debug");
+        await fs.promises.mkdir(debugDir, { recursive: true });
+        const debugFilePath = path.join(debugDir, `cover_letter_${userId}_debug.tex`);
+        await fs.promises.writeFile(debugFilePath, latexContent);
 
-        // Link cover letter to user
+        // Generate PDF
+        const outputDir = path.join(__dirname, "cover_letters");
+        await fs.promises.mkdir(outputDir, { recursive: true });
+        const outputPath = path.join(outputDir, `cover_letter_${userId}_${Date.now()}.pdf`);
+
+        // Options for node-latex
+        const options = {
+            cmd: 'pdflatex',
+            inputs: debugDir,
+            passes: 2
+        };
+
+        // Convert LaTeX to PDF
+        const pdfStream = latex(latexContent, options);
+        const output = fs.createWriteStream(outputPath);
+        
+        pdfStream.pipe(output);
+
+        await new Promise((resolve, reject) => {
+            output.on('finish', resolve);
+            output.on('error', reject);
+            pdfStream.on('error', reject);
+        });
+
+        // Save to database and send response
+        const newCoverLetter = new CoverLetter({ user: userId, pdfPath: outputPath });
+        await newCoverLetter.save();
         user.coverLetters.push(newCoverLetter._id);
         await user.save();
-
-        // Send the PDF file
-        res.download(outputPath, "cover_letter.pdf", (err) => {
-            if (err) console.error("Error sending file:", err);
-        });
+        
+        res.download(outputPath, "cover_letter.pdf");
 
     } catch (error) {
         console.error("Error:", error);
-        res.status(500).json({ error: error.message });
+        
+        // Check if the error is from LaTeX compilation
+        if (error.message.includes('LaTeX')) {
+            const errorLogPath = path.join(__dirname, 'debug', 'latex_errors.log');
+            try {
+                const errorLog = await fs.promises.readFile(errorLogPath, 'utf8');
+                return res.status(500).json({ 
+                    error: "Failed to generate PDF", 
+                    details: errorLog.split('\n').filter(line => line.startsWith('!')).join('\n')
+                });
+            } catch (readError) {
+                console.error("Could not read LaTeX error log:", readError);
+            }
+        }
+        
+        res.status(500).json({ error: "Failed to generate PDF", details: error.message });
     }
 };

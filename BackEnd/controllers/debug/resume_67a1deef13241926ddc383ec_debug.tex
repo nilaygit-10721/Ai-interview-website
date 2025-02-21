@@ -1,0 +1,123 @@
+\documentclass[10pt, letterpaper]{article}
+\usepackage[
+    ignoreheadfoot,
+    top=0.5cm,
+    bottom=0.5cm,
+    left=0.5cm,
+    right=0.5cm,
+    footskip=1.0cm
+]{geometry}
+\usepackage{titlesec, tabularx, array, xcolor, enumitem, fontawesome5, amsmath, hyperref, eso-pic, calc, bookmark, lastpage, changepage, paracol, ifthen, needspace, iftex}
+
+% Define colors
+\definecolor{primaryColor}{RGB}{0, 102, 204}
+
+% Use protective groups for pdfinfo to avoid & issues
+\hypersetup{
+    pdftitle={{John Doe's CV}},
+    pdfauthor={{John Doe}},
+    pdfcreator={{LaTeX with RenderCV}},
+    colorlinks=true,
+    urlcolor=primaryColor
+}
+
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{0cm}
+\setlist[itemize]{nosep}
+
+% Define missing environments if needed
+\newenvironment{onecolentry}{}{} % Fallback if not defined already
+\newenvironment{highlights}{\begin{itemize}}{\end{itemize}} % Fallback for highlights environment
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+\titlespacing{\section}{-1pt}{0.3cm}{0.2cm}
+\titleformat{\subsection}{\bfseries\small}{}{0pt}{}{}
+\renewcommand{\normalsize}{\large}
+
+\begin{document}
+
+% Header
+\begin{center}
+    {\LARGE\bfseries John Doe}\\[5pt]
+    {\makebox[\textwidth][c]{%
+        \faEnvelope[regular] \href{mailto:johndoe@example.com}{johndoe@example.com} \quad
+        \faPhone* \href{tel:+1234567890}{+1234567890} \quad
+        \faLink \hspace{3pt} \href{https://johndoe.dev}{Portfolio} \quad
+\faGithub \hspace{3pt} \href{https://github.com/johndoe}{Github} \quad
+\faLinkedin \hspace{3pt} \href{https://linkedin.com/in/johndoe}{LinkedIn} \quad
+\faCode \hspace{3pt} \href{https://leetcode.com/johndoe}{LeetCode} \quad
+\faCodeBranch \hspace{3pt} \href{https://www.codechef.com/users/johndoe}{CodeChef} \quad
+
+    }}
+\end{center}
+
+% Education Section
+\section{Education}
+\begin{onecolentry}
+    \textbf{XYZ University} 
+    \textit{Bachelor of Science in Computer Science, 2021 - 2025}\\
+    \textbf{CGPA:} 9.2/10
+\end{onecolentry}
+
+\section{Additional Activities}
+\begin{onecolentry}
+    \begin{highlights}
+        \item \textbf{Open Source Contributor} (2023 - Present) - Contributed to various open-source projects, improving documentation and fixing bugs.
+    \end{highlights}
+\end{onecolentry}
+
+% Skills Section
+\section{Skills}
+\textbf{Programming Languages:} Python, JavaScript, C++\\
+\textbf{Software Development:} Agile Methodology, Test-Driven Development\\
+\textbf{Web Technologies/Libraries:} React.js, Node.js, Express.js\\
+\textbf{Databases and Tools:} MongoDB, PostgreSQL, Docker
+
+% Projects Section
+\section{Projects}
+\begin{onecolentry}
+    {\textbf{\large \href{https://github.com/johndoe/resume-builder}{Resume Builder API}}} {\hfill \textbf{Node.js, Express.js, MongoDB}}
+    \begin{itemize}
+        \item Developed an API to generate ATS-friendly resumes.
+        \item Implemented authentication and role-based access control.
+    \end{itemize}
+\end{onecolentry}
+\vspace{7pt}
+\begin{onecolentry}
+    {\textbf{\large \href{https://github.com/johndoe/ecommerce-app}{E-commerce Platform}}} {\hfill \textbf{MERN Stack}}
+    \begin{itemize}
+        \item Built a full-stack e-commerce platform with payment integration.
+        \item Implemented user authentication and role-based access.
+    \end{itemize}
+\end{onecolentry}
+\vspace{7pt}
+
+% Experience Section
+\section{Experience}
+\begin{onecolentry}
+    \textbf{Software Engineering Intern} \hfill TechCorp Inc. | Jun 2023 - Dec 2023
+\begin{itemize}
+\item Developed RESTful APIs and optimized database queries.
+\end{itemize}
+\end{onecolentry}
+\vspace{7pt}
+\begin{onecolentry}
+    \textbf{Freelance Developer} \hfill Self-Employed | Jan 2022 - Present
+\begin{itemize}
+\item Worked with multiple clients to develop web applications and APIs.
+\end{itemize}
+\end{onecolentry}
+
+% Achievements Section
+\section{Achievements}
+\begin{onecolentry}
+    \begin{itemize}
+        \item Global Rank 126 in CodeChef Starters 108
+        \item Top 1\% in LeetCode Weekly Contests
+        \item Published research paper on AI-driven Resume Parsing
+    \end{itemize}
+\end{onecolentry}
+
+\end{document}

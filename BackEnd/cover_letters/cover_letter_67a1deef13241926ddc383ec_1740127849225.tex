@@ -1,0 +1,20 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{Code/Application}
+\author{John Doe}
+\ProvideAdress{Streetname 11}{0000 City}{I}
+\ProvideEmail{johndoe@example.com}
+\ProvidePhone{+1234567890}{I}
+\ProvideName{Google}{I}
+\date{\today}{I}
+\input{Code/Preamble}
+\begin{document}
+\maketitle
+\input{Txt/Application-letter}
+\par
+\dotline
+\vspace{\baselineskip}
+\textit{Attachments: CV, grades, certificate, ID}
+\par
+\SignatureLine{Sincerely,}{7cm}
+\end{document}
