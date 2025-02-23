@@ -60,7 +60,11 @@ const Navbar = () => {
               AI Resume Builder
             </a>
             <a
+<<<<<<< HEAD
               href="/login"
+=======
+              href="/results"
+>>>>>>> origin/main
               className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
             >
               Login
@@ -81,19 +85,31 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a
+<<<<<<< HEAD
               href="/interview"
+=======
+              href="/"
+>>>>>>> origin/main
               className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
             >
               AI Mock Interview
             </a>
             <a
+<<<<<<< HEAD
               href="/resume"
+=======
+              href="/interview"
+>>>>>>> origin/main
               className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
             >
               AI Resume Builder
             </a>
             <a
+<<<<<<< HEAD
               href="/login"
+=======
+              href="/results"
+>>>>>>> origin/main
               className="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
             >
               Login

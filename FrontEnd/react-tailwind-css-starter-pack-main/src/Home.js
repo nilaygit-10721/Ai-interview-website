@@ -2,6 +2,7 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import home_img from './Assets/home_img.png';
+<<<<<<< HEAD
 import home_2 from './Assets/home_2.png';
 import mc from './Assets/microsoft.png';
 import netflix from './Assets/netflix.png';
@@ -17,13 +18,26 @@ import job_apply from './Assets/job_apply.jpg';
 
 import Testimonials from './components/Testimonials';
 import FAQ from './components/Faqs';
+=======
+import fb from './Assets/fb.png';
+import nvidia from './Assets/nvidia.png';
+import pin from './Assets/pin.png'
+import apple from './Assets/apple.png';
+import meta from './Assets/meta.png';
+import ibm from './Assets/ibm.png';
+import tesla from './Assets/tesla.png'
+
+>>>>>>> origin/main
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/autoplay';
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> origin/main
 const Home = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -34,7 +48,11 @@ const Home = () => {
           <h1 className="text-5xl font-bold mb-4 leading-tight">
             Unlock your <br /> potential with us!
           </h1>
+<<<<<<< HEAD
           <p className="text-xl text-gray-600 mb-6">
+=======
+          <p className="text-lg text-gray-600 mb-6">
+>>>>>>> origin/main
             Land Your Dream Job with AI-Powered Interview Coaching
           </p>
           <a
@@ -46,19 +64,30 @@ const Home = () => {
         </div>
 
         {/* Right Section - Image */}
+<<<<<<< HEAD
         <div className=" mr-12">
           <img src={home_img} alt="Interview Coaching" className="w-[500px]" />
         </div>
       </div>
       
     
+=======
+        <div className="max-w-md mr-12">
+          <img src={home_img} alt="Interview Coaching" className="w-full" />
+        </div>
+      </div>
+>>>>>>> origin/main
 
       {/* Additional Section */}
       <div className="px-20 mt-1">
         <h1 className="text-3xl font-semibold">Grab Your Opportunity at, </h1>
       </div>
       <div className="mt-8 px-10">
+<<<<<<< HEAD
       <Swiper
+=======
+  <Swiper
+>>>>>>> origin/main
     spaceBetween={50}
     slidesPerView={3}
     loop={true}
@@ -74,6 +103,7 @@ const Home = () => {
     className="w-full"
   >
     <SwiperSlide className="flex justify-center items-center">
+<<<<<<< HEAD
       <img src={netflix} alt="Netflix" className="w-32 h-auto mx-auto" />
     </SwiperSlide>
     <SwiperSlide className="flex justify-center items-center">
@@ -166,6 +196,43 @@ const Home = () => {
     <FAQ/>
 
 
+=======
+      <img src={nvidia} alt="Netflix" className="w-20 h-auto mx-auto" />
+    </SwiperSlide>
+    <SwiperSlide className="flex justify-center items-center">
+      <img src={fb} alt="Facebook" className="w-20 h-auto mx-auto" />
+    </SwiperSlide>
+    <SwiperSlide className="flex justify-center items-center">
+      <img src={apple} alt="Apple" className="w-20 h-auto mx-auto" />
+    </SwiperSlide>
+    <SwiperSlide className="flex justify-center items-center">
+      <img src={meta} alt="Meta" className="w-20 h-auto mx-auto" />
+    </SwiperSlide>
+    <SwiperSlide className="flex justify-center items-center">
+      <img src={ibm} alt="IBM" className="w-20 h-auto mx-auto" />
+    </SwiperSlide>
+    <SwiperSlide className="flex justify-center items-center">
+      <img src={pin} alt="Pin" className="w-20 h-auto mx-auto" />
+    </SwiperSlide>
+    <SwiperSlide className="flex justify-center items-center">
+      <img src={tesla} alt="Pin" className="w-20 h-auto mx-auto" />
+    </SwiperSlide>
+  </Swiper>
+</div>
+<div className='px-20 mt-32'>
+  <h1 className='text-3xl font-bold'>
+  Generate ATS Friendly Resume
+  </h1>
+  <div className='mt-8'>
+  <span className='text-[#808080]'>Designed to ensure ATS optimization<br/> so your credentials stand out to top<br/> employers and pass machine<br/> screening process.</span>
+  </div>
+  <div className="max-w-md mr-12">
+          <img src={home_img} alt="Interview Coaching" className="w-full" />
+        </div>
+      </div>
+      <div>
+</div>
+>>>>>>> origin/main
     </div>
   );
 };

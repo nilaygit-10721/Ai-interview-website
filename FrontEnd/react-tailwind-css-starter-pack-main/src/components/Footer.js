@@ -8,7 +8,11 @@ import call from "../Assets/phone-solid 1.png";
 
 export default function Footer() {
     return (
+<<<<<<< HEAD
         <div className='w-[99vw] mt-32 max-sm:mt-28 text-white bg-[#05A136] h-[340px] max-lg:h-[570px] px-8 max-lg:px-0 max-lg:justify-evenly flex justify-between items-center max-lg:flex-col'>
+=======
+        <div className='w-[100vw] mt-32 max-sm:mt-28 text-white bg-[#05A136] h-[340px] max-lg:h-[570px] px-8 max-lg:px-0 max-lg:justify-evenly flex justify-between items-center max-lg:flex-col'>
+>>>>>>> origin/main
             <div className='flex max-w-[300px] flex-col gap-4 mb-8 justify-evenly items-center'>
                 <div><h1 className='text-center text-[30px] max-lg:text-[22px]'>Intreview Geeks</h1></div>
                 <div className='w-full font-medium max-lg:text-[15px] text-[20px]'>Empowering Job Seekers, One Step at a Time</div>
@@ -43,9 +47,15 @@ export default function Footer() {
                     <div className='flex gap-4 w-full items-center'><img className='w-5 h-5' src={email}></img> Email: interview@help.co</div>
                     <div className='flex gap-4 w-full items-center'><img className='w-5 h-5' src={call}></img> Phone:+911234567890</div>
                     <div className='flex justify-evenly gap-6 ml-4 mt-2 items-center max-h-[50px]'>
+<<<<<<< HEAD
                         <img className='max-sm:h-[30px] max-sm:w-[30px] cursor-pointer' src={insta} alt="insta"></img>
                         <img className='max-sm:h-[30px] max-sm:w-[30px] cursor-pointer' src={fb} alt='sb'></img>
                         <img className='max-sm:h-[30px] max-sm:w-[30px] cursor-pointer' src={linkedin} alt="linkdin"></img>
+=======
+                        <img className='max-sm:h-[30px] max-sm:w-[30px] cursor-pointer' src={insta}></img>
+                        <img className='max-sm:h-[30px] max-sm:w-[30px] cursor-pointer' src={fb}></img>
+                        <img className='max-sm:h-[30px] max-sm:w-[30px] cursor-pointer' src={linkedin}></img>
+>>>>>>> origin/main
                     </div>
                 </div>
 
