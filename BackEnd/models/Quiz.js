@@ -32,11 +32,6 @@ const quizSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
 });
 
 module.exports = mongoose.model('Quiz', quizSchema);

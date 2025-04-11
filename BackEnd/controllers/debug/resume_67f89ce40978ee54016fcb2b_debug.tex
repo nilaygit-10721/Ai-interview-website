@@ -1,0 +1,97 @@
+\documentclass[10pt, letterpaper]{article}
+\usepackage[
+    ignoreheadfoot,
+    top=0.5cm,
+    bottom=0.5cm,
+    left=0.5cm,
+    right=0.5cm,
+    footskip=1.0cm
+]{geometry}
+\usepackage{titlesec, tabularx, array, xcolor, enumitem, fontawesome5, amsmath, hyperref, eso-pic, calc, bookmark, lastpage, changepage, paracol, ifthen, needspace, iftex}
+
+% Define colors
+\definecolor{primaryColor}{RGB}{0, 102, 204}
+
+% Use protective groups for pdfinfo to avoid & issues
+\hypersetup{
+    pdftitle={{Nilay Vikaskumar Patel's CV}},
+    pdfauthor={{Nilay Vikaskumar Patel}},
+    pdfcreator={{LaTeX with RenderCV}},
+    colorlinks=true,
+    urlcolor=primaryColor
+}
+
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{0cm}
+\setlist[itemize]{nosep}
+
+% Define missing environments if needed
+\newenvironment{onecolentry}{}{} % Fallback if not defined already
+\newenvironment{highlights}{\begin{itemize}}{\end{itemize}} % Fallback for highlights environment
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+\titlespacing{\section}{-1pt}{0.3cm}{0.2cm}
+\titleformat{\subsection}{\bfseries\small}{}{0pt}{}{}
+\renewcommand{\normalsize}{\large}
+
+\begin{document}
+
+% Header
+\begin{center}
+    {\LARGE\bfseries Nilay Vikaskumar Patel}\\[5pt]
+    {\makebox[\textwidth][c]{%
+        \faEnvelope[regular] \href{mailto:nilaypatel10721@gmail.com}{nilaypatel10721@gmail.com} \quad
+        \faPhone* \href{tel:09016989674}{09016989674} \quad
+        
+    }}
+\end{center}
+
+% Education Section
+\section{Education}
+\begin{onecolentry}
+    \textbf{gh} 
+    \textit{fake, 1999-2025}\\
+    \textbf{GPA:} 0.69/4.0
+\end{onecolentry}
+
+\section{Additional Activities}
+\begin{onecolentry}
+    \begin{highlights}
+        \item \textbf{} () - 
+    \end{highlights}
+\end{onecolentry}
+
+% Skills Section
+\section{Skills}
+\textbf{Programming Languages:} html\\
+
+
+
+
+% Projects Section
+\section{Projects}
+\begin{onecolentry}
+    {\textbf{\large chodu banvu}}
+    \begin{itemize}
+        \item jsssssssss
+    \end{itemize}
+\end{onecolentry}
+\vspace{7pt}
+
+% Experience Section
+\section{Experience}
+\begin{onecolentry}
+    \textbf{} \hfill none | 
+\end{onecolentry}
+
+% Achievements Section
+\section{Achievements}
+\begin{onecolentry}
+    \begin{itemize}
+        \item 
+    \end{itemize}
+\end{onecolentry}
+
+\end{document}
