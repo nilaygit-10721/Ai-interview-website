@@ -1,46 +1,59 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home_tools = () => {
+  const navigate = useNavigate();
+
   const tools = [
     {
       title: "Resume Builder",
       description: "Build your resume in one click with our AI.",
+      path: "/tools/resume",
     },
     {
       title: "AI Based Interviews",
       description: "Get AI help with interview coaching and resume builder.",
+      path: "/tools/interview",
     },
     {
       title: "Cover Letter Generator",
       description:
         "Tailor your cover letter to match your unique skills and experiences.",
+      path: "/tools/coverletter",
     },
     {
       title: "Quiz and Puzzles",
       description:
         "An interview quiz to gauge candidates skills and suitability for a role.",
+      path: "/tools/quiz",
     },
-    {
-      title: "Resources",
-      description:
-        "Access a wealth of information to aid your job search and career development.",
-    },
-    {
-      title: "Career Guidance",
-      description:
-        "I'm here to help you with your questions and guide you through our services.",
-    },
+    // {
+    //   title: "Resources",
+    //   description:
+    //     "Access a wealth of information to aid your job search and career development.",
+    //   path: "/resources",
+    // },
+    // {
+    //   title: "Career Guidance",
+    //   description:
+    //     "I'm here to help you with your questions and guide you through our services.",
+    //   path: "/career-guidance",
+    // },
   ];
+
+  const handleExplore = (path) => {
+    navigate(path);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="container mx-auto">
         {/* User Profile Header */}
         <div className="flex justify-end items-center mb-8">
-          <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+          {/* <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
             NP
           </div>
-          <span className="ml-2 text-gray-700 font-medium">Nilay Patel</span>
+          <span className="ml-2 text-gray-700 font-medium">Nilay Patel</span> */}
         </div>
 
         {/* Page Title */}
@@ -54,12 +67,19 @@ const Home_tools = () => {
             <div
               key={index}
               className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              onClick={() => handleExplore(tool.path)}
             >
               <h2 className="text-xl font-bold text-gray-800 mb-2">
                 {tool.title}
               </h2>
               <p className="text-gray-600 mb-4">{tool.description}</p>
-              <button className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">
+              <button
+                className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleExplore(tool.path);
+                }}
+              >
                 Explore
               </button>
             </div>

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const CoverLetterForm = () => {
   const [formData, setFormData] = useState({
-    userId: "", // Will be set from auth context or localStorage
+    userId: "",
     name: "",
     email: "",
     phone: "",
@@ -32,6 +32,20 @@ const CoverLetterForm = () => {
     });
   };
 
+  // Enhanced content cleaning function
+  // Add this cleaning function near the top of your component
+  const cleanLaTeXContent = (content) => {
+    return content
+      .replace(/\\n/g, "\n") // Convert literal \n to newlines
+      .replace(/\r\n/g, "\n") // Normalize line endings
+      .replace(/\n{3,}/g, "\n\n") // Limit consecutive newlines to 2
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .join("\n");
+  };
+
+  // Update your handleSubmit function
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,16 +53,15 @@ const CoverLetterForm = () => {
     setSuccess(false);
 
     try {
-      // Get userId from auth context or localStorage
       const userId = localStorage.getItem("userId") || "test-user-id";
 
-      // Process the content field to handle literal '\n' strings
-      const processedContent = formData.content.replace(/\\n/g, "\n");
+      // Clean the content with our new function
+      const cleanedContent = cleanLaTeXContent(formData.content);
 
       const dataToSend = {
         ...formData,
         userId,
-        content: processedContent, // Use the processed content
+        content: cleanedContent,
       };
 
       const response = await axios.post(
@@ -62,19 +75,19 @@ const CoverLetterForm = () => {
         }
       );
 
-      // Create a download link for the PDF
+      // Handle the download
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "cover_letter.pdf");
+      link.setAttribute("download", `cover_letter_${Date.now()}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
 
       setSuccess(true);
     } catch (err) {
-      console.error("Error generating cover letter:", err);
-      setError(err.response?.data?.error || "Failed to generate cover letter");
+      console.error("Error:", err);
+      setError("Failed to generate PDF. Please check your content formatting.");
     } finally {
       setLoading(false);
     }
