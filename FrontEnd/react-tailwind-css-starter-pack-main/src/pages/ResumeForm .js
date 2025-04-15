@@ -48,6 +48,7 @@ const ResumeForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const backend = process.env.REACT_APP_BACKEND_URL;
 
   // Handle input changes
   const handleChange = (e) => {
@@ -194,16 +195,13 @@ const ResumeForm = () => {
       console.log(dataToSend);
 
       // Send data to your specified API endpoint
-      const response = await fetch(
-        "http://localhost:4000/api/v1/resumeBuilder",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend),
-        }
-      );
+      const response = await fetch(`${backend}/api/v1/resumeBuilder`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

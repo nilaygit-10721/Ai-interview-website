@@ -13,6 +13,7 @@ const QuizGenerator = () => {
   const [score, setScore] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const backend = process.env.REACT_APP_BACKEND_URL;
 
   const experienceOptions = [
     { value: "0-1", label: "0-1 years" },
@@ -33,7 +34,7 @@ const QuizGenerator = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/generate-quiz",
+        `${backend}/api/v1/generate-quiz`,
         formData
       );
       setQuiz(response.data.quiz);

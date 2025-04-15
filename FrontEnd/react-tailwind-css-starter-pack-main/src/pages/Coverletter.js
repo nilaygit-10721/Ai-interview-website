@@ -23,6 +23,7 @@ const CoverLetterForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const backend = process.env.REACT_APP_BACKEND_URL;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,7 +66,7 @@ const CoverLetterForm = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:4000/api/v1/coverLetterBuilder",
+        `${backend}/api/v1/coverLetterBuilder`,
         dataToSend,
         {
           responseType: "blob",

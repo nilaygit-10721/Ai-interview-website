@@ -8,6 +8,7 @@ const InterviewPage = () => {
   const [error, setError] = useState("");
   const [conversation, setConversation] = useState([]);
   const [questionCount, setQuestionCount] = useState(0);
+  const backend = process.env.REACT_APP_BACKEND_URL;
 
   // Form data
   const [formData, setFormData] = useState({
@@ -46,14 +47,10 @@ const InterviewPage = () => {
       form.append("company", formData.company);
       form.append("resume", formData.resume);
 
-      const response = await axios.post(
-        "http://localhost:4000/api/v1/interview",
-        form,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-          responseType: "blob",
-        }
-      );
+      const response = await axios.post(`${backend}/api/v1/interview`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
+        responseType: "blob",
+      });
 
       const url = URL.createObjectURL(new Blob([response.data]));
       setAudioUrl(url);
