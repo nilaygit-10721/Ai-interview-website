@@ -3,9 +3,11 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const database = require("./config/database.js");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // Initialize express
 const app = express();
+app.use(cookieParser()); // ✅ add this
 
 // Configure environment variables
 dotenv.config();
@@ -15,7 +17,7 @@ const PORT = process.env.PORT || 4000;
 app.use(
   cors({
     origin: [
-      "*", // Your Vite development server
+      "http://localhost:3000", // Your Vite development server
     ],
     credentials: true,
   })

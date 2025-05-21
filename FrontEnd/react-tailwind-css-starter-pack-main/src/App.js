@@ -10,6 +10,7 @@ import ResumeForm from "./pages/ResumeForm ";
 import Coverletter from "./pages/Coverletter";
 import InterviewSystem from "./pages/InterviewSystem";
 import QuizGenerator from "./pages/QuizGenerator";
+import Profile from "./pages/Profile";
 
 const Layout = ({ children, showNavbar = true }) => {
   return (
@@ -78,6 +79,14 @@ const App = () => {
           element={
             <Layout showNavbar={false}>
               <InterviewSystem />
+            </Layout>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Layout showNavbar={false}>
+              <Profile />
             </Layout>
           }
         />

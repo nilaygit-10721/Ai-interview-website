@@ -43,18 +43,17 @@ const deepgram = createClient(process.env.DEEPGRAM_API_KEY);
 
 // Helper function to convert stream to audio buffer
 const getAudioBuffer = async (response) => {
-    const reader = response.getReader();
-    const chunks = [];
+  const reader = response.getReader();
+  const chunks = [];
 
-    while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        chunks.push(value);
-    }
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+  }
 
-    return Buffer.concat(chunks);
+  return Buffer.concat(chunks);
 };
-
 
 // exports.voiceToText = async (audioStream, res) => {
 //     try {
@@ -114,40 +113,40 @@ const getAudioBuffer = async (response) => {
 //     }
 // };
 
-
-
 const axios = require("axios");
-
-
-const OPENAI_API_KEY = process.env.API_KEY;
-const OPENAI_BASE_URL = process.env.BASE_URL;
 
 // Function to interact with ChatGPT
 const chatWithGPT = async (messages) => {
-    try {
-        const response = await axios.post(
-            `${OPENAI_BASE_URL}/chat/completions`,
-            {
-                model: "gpt-4o",
-                messages,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${OPENAI_API_KEY}`,
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-        return response.data.choices[0].message.content; // Extract response
-    } catch (error) {
-        console.error("ChatGPT API Error:", error.response?.data || error);
-        throw new Error("ChatGPT API failed");
-    }
+  try {
+    const userMessage = messages.map((msg) => msg.content).join("\n");
+
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyD9OHRIsKkW-wTl_jRG39r30pDZ6k2xBBc`,
+      {
+        contents: [
+          {
+            parts: [{ text: userMessage }],
+          },
+        ],
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return (
+      response.data.candidates?.[0]?.content?.parts?.[0]?.text || "No response."
+    );
+  } catch (error) {
+    console.error("Gemini API Error:", error.response?.data || error);
+    throw new Error("Gemini API failed");
+  }
 };
 
 const multer = require("multer");
 const pdfParse = require("pdf-parse");
-
 
 // Store state in memory (in real apps, use DB or session)
 let conversationHistory = [];
@@ -164,11 +163,15 @@ exports.interview = [
       const file = req.file;
 
       if (!file || !role || !company) {
-        return res.status(400).json({ error: "Resume (PDF), role, and company are required" });
+        return res
+          .status(400)
+          .json({ error: "Resume (PDF), role, and company are required" });
       }
 
       if (file.mimetype !== "application/pdf") {
-        return res.status(400).json({ error: "Only PDF resumes are supported." });
+        return res
+          .status(400)
+          .json({ error: "Only PDF resumes are supported." });
       }
 
       const pdfData = await pdfParse(file.buffer);
@@ -177,12 +180,12 @@ exports.interview = [
       conversationHistory = [
         {
           role: "system",
-          content: `You are an interviewer hiring for a ${role} role at ${company}.`
+          content: `You are an interviewer hiring for a ${role} role at ${company}.`,
         },
         {
           role: "user",
-          content: `Here is my resume:\n${resumeText}\nStart the interview with a relevant question.`
-        }
+          content: `Here is my resume:\n${resumeText}\nStart the interview with a relevant question.`,
+        },
       ];
 
       const question = await chatWithGPT(conversationHistory);
@@ -198,14 +201,16 @@ exports.interview = [
       const buffer = await getAudioBuffer(await response.getStream());
 
       res.setHeader("Content-Type", "audio/wav");
-      res.setHeader("Content-Disposition", 'attachment; filename="interview_question.wav"');
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="interview_question.wav"'
+      );
       res.send(buffer);
-
     } catch (error) {
       console.error("Error in interview:", error);
       res.status(500).json({ error: "Internal server error" });
     }
-  }
+  },
 ];
 
 // Follow-up and transcription route
@@ -225,14 +230,12 @@ exports.voiceToText = [
       }
 
       // Step 1: Transcribe audio using Deepgram prerecord API
-      const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
-        file.buffer,
-        {
+      const { result, error } =
+        await deepgram.listen.prerecorded.transcribeFile(file.buffer, {
           model: "nova-3",
           language: "en-US",
           smart_format: true,
-        }
-      );
+        });
 
       if (error) {
         console.error("Deepgram Error:", error);
@@ -245,7 +248,7 @@ exports.voiceToText = [
       // Maintain conversation history and track question count
       const conversationHistory = [
         { role: "system", content: "You are a professional interviewer." },
-        { role: "user", content: transcript }
+        { role: "user", content: transcript },
       ];
 
       // Step 2: Send transcript to ChatGPT
@@ -258,7 +261,7 @@ exports.voiceToText = [
         {
           model: "aura-asteria-en",
           encoding: "linear16",
-          container: "wav"
+          container: "wav",
         }
       );
 
@@ -266,12 +269,14 @@ exports.voiceToText = [
 
       // Step 4: Send the generated audio
       res.setHeader("Content-Type", "audio/wav");
-      res.setHeader("Content-Disposition", 'attachment; filename="response.wav"');
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="response.wav"'
+      );
       res.send(audioBuffer);
-
     } catch (err) {
       console.error("Interview audio processing error:", err);
       res.status(500).json({ error: "Internal server error" });
     }
-  }
+  },
 ];

@@ -27,33 +27,31 @@ const Home_tools = () => {
         "An interview quiz to gauge candidates skills and suitability for a role.",
       path: "/tools/quiz",
     },
-    // {
-    //   title: "Resources",
-    //   description:
-    //     "Access a wealth of information to aid your job search and career development.",
-    //   path: "/resources",
-    // },
-    // {
-    //   title: "Career Guidance",
-    //   description:
-    //     "I'm here to help you with your questions and guide you through our services.",
-    //   path: "/career-guidance",
-    // },
   ];
 
   const handleExplore = (path) => {
     navigate(path);
   };
 
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="container mx-auto">
-        {/* User Profile Header */}
-        <div className="flex justify-end items-center mb-8">
-          {/* <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
-            NP
-          </div>
-          <span className="ml-2 text-gray-700 font-medium">Nilay Patel</span> */}
+        {/* Header with Profile Icon */}
+        <div className="flex justify-end mb-8">
+          <button
+            onClick={handleProfileClick}
+            className="flex items-center space-x-2 hover:bg-gray-200 p-2 rounded-full transition"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              alt="Profile"
+              className="w-9 h-9 rounded-full"
+            />
+          </button>
         </div>
 
         {/* Page Title */}
