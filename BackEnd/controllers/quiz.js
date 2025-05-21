@@ -49,7 +49,8 @@ Generate a **10-question multiple-choice quiz** for a **${role}** position at **
 The candidate has **${experience}** years of experience.  
 
 Each question must have **4 options**, with **one correct answer**.  
-⚠️ **STRICTLY RETURN ONLY VALID JSON** (no explanations, no extra text).  
+⚠️ **STRICTLY RETURN ONLY VALID JSON** (no explanations, no extra text).
+  
 
 JSON Format:
 [
