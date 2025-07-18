@@ -121,7 +121,7 @@ const chatWithGPT = async (messages) => {
     const userMessage = messages.map((msg) => msg.content).join("\n");
 
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyD9OHRIsKkW-wTl_jRG39r30pDZ6k2xBBc`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAyqgWWtQ7X6kUZhr0J0bJzlWkI-4dy6jA`,
       {
         contents: [
           {
